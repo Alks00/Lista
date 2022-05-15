@@ -11,12 +11,16 @@ Lista* criar_lista(){
     return lista;
 }
 
+int lista_vazia(Lista* lista){
+    return(lista -> inicio == NULL);
+}
+
 void adicionar_elemento(Lista* lista,char nome,int n){
     Elemento* elemento = (Elemento*)malloc(sizeof(Elemento));
-    elemento -> nome = nome;
+    strcpy(elemento -> nome,nome);
     elemento -> num = n;
 
-    if (lista -> tam == 0)
+    if (lista_vazia(lista))
     {
         lista -> inicio = elemento;
         lista -> fim = elemento;
@@ -31,7 +35,7 @@ void adicionar_elemento(Lista* lista,char nome,int n){
     }else
     {
         elemento -> prox = lista -> inicio;
-        lista -> fim -> prox = elemento -> prox;
+        lista -> fim -> prox = elemento;
         lista -> fim = elemento;
         lista -> tam++;
     }
@@ -52,9 +56,10 @@ void print_lista(Lista* lista){
 
 void remover_pos(Lista* lista,int pos){
     Elemento* aux = lista -> inicio;
+    Elemento* aux1 = NULL;
     if(pos > lista -> tam){
         printf("Posição não existe!\n");
-    }else if (lista -> tam == 0)
+    }else if (lista_vazia(lista))
     {
         printf("Lista vazia.\n");
     }else if (lista -> tam == 1)
@@ -66,13 +71,57 @@ void remover_pos(Lista* lista,int pos){
     }else
     {
         for(int i=1;i<pos;i++){
+            aux1 = aux;
             aux = aux -> prox;
         }
         printf("(%d ", aux -> num);
         printf("%s) Removido da lista!\n", aux -> nome);
+        aux1 -> prox = aux -> prox;
         free(aux);
         lista -> tam--;
     }
-    
-    
+}
+
+void adicionar_inicio(Lista* lista,char nome,int n){
+    Elemento* elemento = (Elemento*)malloc(sizeof(Elemento));
+    strcpy(elemento -> nome,nome);
+    elemento -> num = n;
+    lista -> fim -> prox = elemento;
+    elemento -> prox = lista -> inicio;
+    lista -> inicio = elemento;
+    lista -> tam++;
+}
+
+void remover_inicio(Lista* lista){
+    Elemento* aux = lista -> inicio;
+    if(lista_vazia(lista)){
+        printf("Lista vazia!");
+    }else if (lista -> tam == 1)
+    {
+        free(aux);
+        lista -> tam--;
+    }else{
+        lista -> inicio = lista -> inicio -> prox;
+        lista -> inicio -> prox = lista -> inicio -> prox -> prox;
+        lista -> fim -> prox = lista -> inicio;
+        free(aux);
+        lista -> tam--;
+    }
+}
+
+int tamanho_lista(Lista* lista){
+    return lista -> tam;
+}
+
+void finalizar_lista(Lista* lista){
+    Elemento *aux,*aux1;
+
+    aux = lista -> inicio;
+
+    while(aux!=NULL){
+        aux1 = aux -> prox;
+        free(aux);
+        aux = aux1;
+    }
+    free(lista);
 }

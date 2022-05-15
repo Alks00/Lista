@@ -16,5 +16,7 @@ typedef struct lista
 
 Lista* criar_lista();
 
+int lista_vazia(Lista* lista);
+
 void adicionar_elemento(Lista* lista,char nome,int n);
 
