@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include "listaCircular.h"
 
-typedef struct elemento
+/*typedef struct elemento
 {
     char nome[30];
     int num;
@@ -100,14 +100,52 @@ void adicionar_inicio(Lista* lista,char *nome,int n){
     Elemento* elemento = (Elemento*)malloc(sizeof(Elemento));
     strcpy(elemento -> nome,nome);
     elemento -> num = n;
-    lista -> fim -> prox = elemento;
-    elemento -> prox = lista -> inicio;
-    lista -> inicio = elemento;
-    lista -> tam++;
+    
+    if (lista_vazia(lista))
+    {
+        lista -> inicio = elemento;
+        lista -> fim = elemento;
+        lista -> tam++;
+        elemento -> prox = NULL;
+    }else if (lista -> tam == 1)
+    {
+        lista -> fim -> prox = elemento;
+        lista -> inicio = elemento;
+        elemento -> prox = lista -> fim;
+        lista -> tam++;
+    }else
+    {
+        lista -> fim -> prox = elemento;
+        elemento -> prox = lista -> inicio;
+        lista -> inicio = elemento;
+        lista -> tam++;
+    }
+    
 }
 
-remover_final(Lista* lista){
+void adicionar_posicao(Lista* lista,char *nome,int n,int pos){
     Elemento* aux = lista -> inicio;
+    Elemento* aux1 = NULL;
+    Elemento* elemento = (Elemento*)malloc(sizeof(Elemento));
+    strcpy(elemento -> nome,nome);
+    elemento -> num = n;
+
+    if(pos > (lista -> tam + 1)){
+        printf("Posição não existe!\n");
+    }else{
+    for(int i=1;i<pos;i++){
+            aux1 = aux;
+            aux = aux -> prox;
+        }
+    aux1 -> prox = elemento;
+    elemento -> prox = aux;
+    lista -> tam++;
+    }
+}
+
+void remover_final(Lista* lista){
+    Elemento* aux = lista -> fim;
+    Elemento* aux1 = lista -> inicio;
     if(lista_vazia(lista)){
         printf("Lista vazia!");
     }else if (lista -> tam == 1)
@@ -115,8 +153,11 @@ remover_final(Lista* lista){
         free(aux);
         lista -> tam--;
     }else{
-        lista -> inicio = lista -> inicio -> prox;
-        lista -> inicio -> prox = lista -> inicio -> prox -> prox;
+        while (aux1 -> prox != lista -> fim)
+        {
+            aux1 = aux1 -> prox;
+        }
+        lista -> fim = aux1;
         lista -> fim -> prox = lista -> inicio;
         free(aux);
         lista -> tam--;
@@ -133,8 +174,8 @@ void remover_inicio(Lista* lista){
         free(aux);
         lista -> tam--;
     }else{
-        lista -> inicio = lista -> inicio -> prox;
-        lista -> inicio -> prox = lista -> inicio -> prox -> prox;
+        lista -> inicio = aux1;
+        lista -> inicio -> prox = aux1 -> prox;
         lista -> fim -> prox = lista -> inicio;
         free(aux);
         lista -> tam--;
@@ -157,7 +198,7 @@ void finalizar_lista(Lista* lista){
     }
     free(lista);
 }
-
+*/
 
 int main(void){
     
@@ -178,7 +219,7 @@ int main(void){
         printf("7  - Remover na posição\n");
         printf("8  - Imprimir lista\n");
         printf("9  - Verificar lista\n");
-        printf("10 - Limpar lista\n");
+        printf("10 - Limpar lista e Sair\n");
         printf("11 - Sair\n");
         scanf("%d",&opc);
         switch (opc)
@@ -194,7 +235,7 @@ int main(void){
             scanf("%d",&num);
             printf("\n\n");
 
-            adicionar_elemento(l,nome,num);
+            adicionar_final(l,nome,num);
 
             break;
         case 3:
@@ -209,8 +250,19 @@ int main(void){
 
             break;
         case 4:
+            getchar();
+            printf("Digite um nome:\n");
+            gets(nome);
+            printf("Digite um valor:\n");
+            scanf("%d",&num);
+            printf("Digite a posição onde adicionar:");
+            scanf("%d",&pos);
+            printf("\n\n");
+
+            adicionar_posicao(l,nome,num,pos);
             break;
         case 5:
+            remover_final(l);
             break;
         case 6:
             remover_inicio(l);
@@ -232,8 +284,6 @@ int main(void){
             break;
         case 10:
             finalizar_lista(l);
-            break;
-        case 11:
             break;
         
         default:
