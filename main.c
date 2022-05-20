@@ -285,11 +285,14 @@ int main(void){
         case 10:
             finalizar_lista(l);
             break;
+        case 11:
+            selection_sort(l);
+        break;
         
         default:
             break;
         }
-    } while (opc < 11);
+    } while (opc < 12);
     
 
     return 0;

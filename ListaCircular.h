@@ -57,15 +57,15 @@ void adicionar_final(Lista* lista,char *nome,int n){
 
 void print_lista(Lista* lista){
     Elemento* aux = lista -> inicio;
-    printf("-%d ", aux -> num);
-    printf("%s\n", aux -> nome);
+    printf("%s", aux -> nome);
+    printf("-%d\n", aux -> num);
     aux = aux -> prox;
     if (lista -> tam > 1)
     {
         while (aux != lista -> inicio)
         {
-            printf("-%d ", aux -> num);
-            printf("%s\n", aux -> nome);
+            printf("%s", aux -> nome);
+            printf("-%d\n", aux -> num);
             aux = aux -> prox;
         }
     }
@@ -202,3 +202,88 @@ void finalizar_lista(Lista* lista){
     free(lista);
     printf("Lista limpa\n");
 }
+
+void selection_sort(Lista* lista){
+    int i = 0,j,min;
+    Elemento aux;
+    Elemento vetor[lista -> tam];
+    Elemento* auxV = lista -> inicio;
+
+    while (auxV -> prox != lista -> inicio)
+    {
+        vetor[i].num = auxV->num;
+        strcpy(vetor[i].nome,auxV -> nome);
+        auxV = auxV -> prox;
+        i++;
+    }
+
+    for (i = 0; i < (lista -> tam-1); i++)
+    {
+        min = i;
+        for (j = i+1; j < lista -> tam; j++)
+        {
+            if(vetor[j].num < vetor[min].num){
+                min = j;
+            }
+        }
+        if(i != min){
+            aux = vetor[i];
+            vetor[i] = vetor[min];
+            vetor[min] = aux;
+
+        }   
+    }
+
+    for (i = 0; i < lista -> tam; i++)
+    {
+        printf("-%d ", vetor[i].num);
+        printf("%s\n", vetor[i].nome);
+    }
+    
+}
+
+/*void quick_sort(Lista* lista,int inicio,int fim){
+    int i = inicio;
+    int j = fim;
+    Elemento pivot;
+    Elemento aux;
+    Elemento vetor[lista -> tam];
+    Elemento* auxV = lista -> inicio;
+
+    while (auxV -> prox != lista -> inicio)
+    {
+        vetor[i].num = auxV->num;
+        strcpy(vetor[i].nome,auxV -> nome);
+        auxV = auxV -> prox;
+        i++;
+    }
+
+    pivot = vetor[(i+j)/2];
+
+    while (i <= j) {
+        while ((vetor[i].num < pivot.num) && (i < fim)) {
+            i++;
+        }
+
+        while ((vetor[j].num > pivot.num) && j > inicio) {
+            j--;
+        }
+
+        if (i <= j) {
+            aux = vetor[i];
+            vetor[i] = vetor[j];
+            vetor[j] = aux;
+
+            i++;
+            j--;
+        }
+    }
+
+    if (inicio < j) {
+        quick_sort(vetor, inicio, j);
+    }
+
+    if (i < fim) {
+        quick_sort(vetor, i, fim);
+    }
+}*/
